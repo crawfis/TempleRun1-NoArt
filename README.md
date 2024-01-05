@@ -52,27 +52,17 @@ In contrast, changing lanes using the accelerometer is very fast compared to eve
 
 ### Alternative inputs
 
-· Assistive devices like large buttons or keyboards:
-
-o [https://www.youtube.com/watch?v=iOIk4nRe87I](https://www.youtube.com/watch?v=iOIk4nRe87I)
-
-o [https://www.youtube.com/watch?v=YU-RP4IJaLY](https://www.youtube.com/watch?v=YU-RP4IJaLY)
-
-o [https://www.amazon.com/stores/AbleNet/page/C241332A-1019-4429-A853-BB455D2D3FE9?ref\_=ast\_bln](https://www.amazon.com/stores/AbleNet/page/C241332A-1019-4429-A853-BB455D2D3FE9?ref_=ast_bln)
-
-· VR head swipe
-
-· Video gesture tracking
-
-· Voice
-
-· Facial expression
-
-· DDR or Dance Mat
-
-· Pressure plate
-
-· Bosa ball with accelerator
+- Assistive devices like large buttons or keyboards:
+- [https://www.youtube.com/watch?v=iOIk4nRe87I](https://www.youtube.com/watch?v=iOIk4nRe87I)
+- [https://www.youtube.com/watch?v=YU-RP4IJaLY](https://www.youtube.com/watch?v=YU-RP4IJaLY)
+- [https://www.amazon.com/stores/AbleNet/page/C241332A-1019-4429-A853-BB455D2D3FE9?ref\_=ast\_bln](https://www.amazon.com/stores/AbleNet/page/C241332A-1019-4429-A853-BB455D2D3FE9?ref_=ast_bln)
+- VR head swipe
+- Video gesture tracking
+- Voice
+- Facial expression
+- DDR or Dance Mat
+- Pressure plate
+- Bosa ball with accelerator
 
 ## Projects
 
@@ -103,13 +93,9 @@ Here is a list of experiments to use this framework to create better variants.
 12. Spline-based paths
 13. Tiles
 14. Problem solving
-
-a. Math
-
-b. Color
-
-c. Shape
-
+	a. Math
+	b. Color
+	c. Shape
 15. Endless possibilities for endless runners
 
 ### Other Games
@@ -118,9 +104,6 @@ c. Shape
 17. Red-light, Green-light
 18. All inputs (turns / teleportation) are initially valid, but are used up eventually, requiring the user to perform all actions (e.g., exercises).
 19. Swipe left, swipe right games with a timer. Select favorites from random that get folded into back into the random algorithm with increasing probability. Timer runs out and you are stuck with that selection. Incentive to build up your favorites before time expires.
-
-a. Avatar selection
-
-b. Marry Me: possible spouse.
-
+	a. Avatar selection
+	b. Marry Me: possible spouse.
 20. Any single tap game
