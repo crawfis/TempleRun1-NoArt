@@ -53,9 +53,9 @@ In contrast, changing lanes using the accelerometer is very fast compared to eve
 ### Alternative inputs
 
 - Assistive devices like large buttons or keyboards:
-- [https://www.youtube.com/watch?v=iOIk4nRe87I](https://www.youtube.com/watch?v=iOIk4nRe87I)
-- [https://www.youtube.com/watch?v=YU-RP4IJaLY](https://www.youtube.com/watch?v=YU-RP4IJaLY)
-- [https://www.amazon.com/stores/AbleNet/page/C241332A-1019-4429-A853-BB455D2D3FE9?ref\_=ast\_bln](https://www.amazon.com/stores/AbleNet/page/C241332A-1019-4429-A853-BB455D2D3FE9?ref_=ast_bln)
+	- [https://www.youtube.com/watch?v=iOIk4nRe87I](https://www.youtube.com/watch?v=iOIk4nRe87I)
+	- [https://www.youtube.com/watch?v=YU-RP4IJaLY](https://www.youtube.com/watch?v=YU-RP4IJaLY)
+	- [https://www.amazon.com/stores/AbleNet/page/C241332A-1019-4429-A853-BB455D2D3FE9?ref\_=ast\_bln](https://www.amazon.com/stores/AbleNet/page/C241332A-1019-4429-A853-BB455D2D3FE9?ref_=ast_bln)
 - VR head swipe
 - Video gesture tracking
 - Voice
