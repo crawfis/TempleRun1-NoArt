@@ -1,8 +1,15 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CrawfisSoftware.TempleRun
 {
+    /// <summary>
+    /// Maps input events to game events. Will check if a turn request is the proper direction and within 
+    ///    the turn distance. If so, it will fire a turn successful event.
+    ///    Dependencies: DistanceTracker, EventsPublisherTempleRun
+    ///    Subscribes: LeftTurnRequested and RightTurnRequested. If it is a valid turn published corresponding turn successful event.
+    ///    Subscribes: ActiveTrackChanged - adjusts the next valid turn distance.
+    ///    Publishes: LeftTurnSucceeded, RightTurnSucceeded
+    /// </summary>
     internal class PlayerController : MonoBehaviour
     {
         [SerializeField] private DistanceTracker _distanceTracker;
@@ -10,10 +17,9 @@ namespace CrawfisSoftware.TempleRun
         private float _safeTurnDistance = 1f;
         private float _trackDistance = 0;
         float _turnAvailableDistance;
+        // Possible Bug: If Direction is changed to a Flag, then _nextTrackDirection needs to be masked. Could be done now just in case.
         private Direction _nextTrackDirection;
 
-        // Handle Turn request / Advance to next segment
-        // Handle Collision event
         private void Awake()
         {
             EventsPublisherTempleRun.Instance.SubscribeToEvent(KnownEvents.LeftTurnRequested, OnLeftTurnRequested);
@@ -22,31 +28,37 @@ namespace CrawfisSoftware.TempleRun
             _safeTurnDistance = Blackboard.Instance.GameConfig.SafeTurnDistance;
         }
 
-        private void OnLeftTurnRequested(object sender, object data)
+        private void OnTurnRequested(object sender, object data, KnownEvents turnSucceedEvent)
         {
-            if ((_nextTrackDirection != Direction.Right) && _distanceTracker.DistanceTravelled > _turnAvailableDistance)
+            if (_distanceTracker.DistanceTravelled > _turnAvailableDistance)
             {
                 float distance = _distanceTracker.DistanceTravelled;
                 _distanceTracker.UpdateDistance(_trackDistance - distance);
-                EventsPublisherTempleRun.Instance.PublishEvent(KnownEvents.LeftTurnSucceeded, this, distance);
+                EventsPublisherTempleRun.Instance.PublishEvent(turnSucceedEvent, this, distance);
+            }
+        }
+
+        private void OnLeftTurnRequested(object sender, object data)
+        {
+            if (_nextTrackDirection != Direction.Right)
+            {
+                OnTurnRequested(sender, data, KnownEvents.LeftTurnSucceeded);
             }
         }
 
         private void OnRightTurnRequested(object sender, object data)
         {
-            if ((_nextTrackDirection != Direction.Left) && _distanceTracker.DistanceTravelled > _turnAvailableDistance)
+            if (_nextTrackDirection != Direction.Left) 
             {
-                float distance = _distanceTracker.DistanceTravelled;
-                _distanceTracker.UpdateDistance(_trackDistance - distance);
-                EventsPublisherTempleRun.Instance.PublishEvent(KnownEvents.RightTurnSucceeded, this, distance);
+                OnTurnRequested(sender, data, KnownEvents.RightTurnSucceeded);
             }
         }
 
         private void OnTrackChanged(object sender, object data)
         {
-            var tuple = ((Direction direction, float segmentDistance)) data;
-            _nextTrackDirection = tuple.direction;
-            _trackDistance += tuple.segmentDistance;
+            var (direction, segmentDistance) = ((Direction direction, float segmentDistance)) data;
+            _nextTrackDirection = direction;
+            _trackDistance += segmentDistance;
             _turnAvailableDistance = _trackDistance - _safeTurnDistance;
         }
     }

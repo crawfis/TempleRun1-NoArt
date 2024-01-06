@@ -5,7 +5,11 @@ using UnityEngine;
 
 namespace CrawfisSoftware.TempleRun
 {
-    public enum KnownEvents { LeftTurnRequested, LeftTurnSucceeded, RightTurnRequested, RightTurnSucceeded, ActiveTrackChanged, PlayerFailed, GameStarted, GameOver, Pause, Resume, CountdownStarted, CountdownTick };
+    /// <summary>
+    /// Singleton event publisher that interfaces to the CrawfisSoftware.AssetManagement.EventsPublisher singleton.
+    /// Avoids the problem with strings and misspelling when dealing with the EventsPublisher. Several of these could be used with
+    /// different enum types for more modularity.
+    /// </summary>
     internal class EventsPublisherTempleRun : MonoBehaviour
     {
         public static EventsPublisherTempleRun Instance { get; private set; }
@@ -19,13 +23,7 @@ namespace CrawfisSoftware.TempleRun
                 return;
             }
             Instance = this;
-            foreach (KnownEvents eventEnum in Enum.GetValues(typeof(KnownEvents)))
-            {
-                string eventName = eventEnum.ToString();
-                KnownEventsMap.Add(eventEnum, eventName);
-                EventsPublisher.Instance.RegisterEvent(eventName);
-            }
-
+            RegisterKnownEvents();
         }
 
         public void PublishEvent(KnownEvents eventEnum, object sender, object data)
@@ -36,6 +34,21 @@ namespace CrawfisSoftware.TempleRun
         public void SubscribeToEvent(KnownEvents eventEnum, Action<object, object> callback)
         {
             EventsPublisher.Instance.SubscribeToEvent(eventEnum.ToString(), callback);
+        }
+
+        public void UnsubscribeToEvent(KnownEvents eventEnum, Action<object, object> callback)
+        {
+            EventsPublisher.Instance.UnsubscribeToEvent(eventEnum.ToString(), callback);
+        }
+
+        private static void RegisterKnownEvents()
+        {
+            foreach (KnownEvents eventEnum in Enum.GetValues(typeof(KnownEvents)))
+            {
+                string eventName = eventEnum.ToString();
+                KnownEventsMap.Add(eventEnum, eventName);
+                EventsPublisher.Instance.RegisterEvent(eventName);
+            }
         }
     }
 }

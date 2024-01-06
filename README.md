@@ -1,10 +1,10 @@
 # Temple Run without Art
 
-I recently watched a tutorial video by one of my favorite youtuber’s for Unity game Development, [samyam](https://www.youtube.com/@samyam). What struck me was the high dependency on various Unity components and the need to search for and find these components. I was also intrigued that the core mechanic of the Temple Run swipe-left or swipe-right was not a turn, but a teleportation (more on this later). I thought I would try to create an infinite runner template that was more **event** focused. This will also not require any physics, graphics, or audio. I have written several infinite runners over the years. I recall my two-year-old grandson playing Temple Run when it first came out. He loved the game but could not play it very well. I teach video game design and development and often tell my students to think about how to make their games playable for different audiences: young, old, physically challenged, cognitively challenged. Simple separation of concerns and data-driven configurations. The company I helped found ([www.rxgames.com](http://www.rxgames.com/)) focuses on using the human body to perform game mechanics to aid recovery from traumatic brain injury (TBI), stroke, knee replacements and other neuro- or ortho-rehabilitation. These movements take considerable amount of time to trigger the game action compared to traditional inputs. For example, going into and out of a deep squat can take a couple of seconds to perform. Allowing for deep configuration of your games allows swapping out various inputs, even as in our case using the same game but with different exercises which have differing times to execute (e.g., arm raise versus a squat).
+I recently watched a tutorial video by one of my favorite youtuber’s for Unity game Development, [samyam](https://www.youtube.com/@samyam). What struck me was the high dependency on various Unity components and the need to search for and find these components. Many Unoty tutorials have a graphics-first development style. I thought I would try to create an infinite runner template that was more **event** focused. This will not require any physics, graphics, or audio. I have written several infinite runners over the years. I recall my two-year-old grandson playing Temple Run when it first came out. He loved the game but could not play it very well. I teach video game design and development and often tell my students to think about how to make their games playable for different audiences: young, old, physically challenged, cognitively challenged. Simple separation of concerns and data-driven configurations. The company I helped found ([www.rxgames.com](http://www.rxgames.com/)) focuses on using the human body to perform game mechanics to aid recovery from traumatic brain injury (TBI), stroke, knee replacements and other neuro- or ortho-rehabilitation. These movements take considerable amount of time to trigger the game action compared to traditional inputs. For example, going into and out of a deep squat can take a couple of seconds to perform. Allowing for deep configuration of your games allows swapping out various inputs, even as in our case using the same game but with different exercises which have differing times to execute (e.g., arm raise versus a squat).
 
 ## Rethinking Temple Run
 
-If we look at the initial part of Temple Run, the player has to try to go to the left or right within a very specific time (or alternatively within a very specific distance). If they time this correctly the player is abruptly turned to go in the corresponding direction and is centered on this _new_ path. As was shown in the video, the player’s position and orientation is set to the start of this new path. The camera also changes abruptly such that the path is always oriented in the vertical screen space.
+If we look at the initial part of Temple Run, the player has to try to go to the left or right within a very specific time (or alternatively within a very specific distance). If they time this correctly the player is abruptly turned to go in the corresponding direction and is centered on this _new_ path. As was shown in the video, the player’s position and orientation is set to the start of this new path. The core mechanic of the Temple Run's swipe-left or swipe-right is not a turn, but a teleportation (more on this later).  The camera also changes abruptly such that the path is always oriented in the vertical screen space.
 
 Thus, for a successful turn, we need an event to trigger before the player reaches a specific distance. The event should not trigger if the player is too far away from this distance. The simplest game we can thus make has an input event that is mapped to a turn event if the input is valid for the current state of the game. This state should include the distance the player has traversed or is from the end of the path and whether a left or right input event is valid. The game should provide some indication of how far or soon the player will reach the end of the path.
 
@@ -64,11 +64,11 @@ In contrast, changing lanes using the accelerometer is very fast compared to eve
 - Pressure plate
 - Bosa ball with accelerator
 
-## Projects
+# Projects
 
 Here is a list of experiments to use this framework to create better variants.
 
-### UI Toolkit-based
+## UI Toolkit-based
 
 1. Progress bar: linear or radial (think of the power in golf or fishing games). Player may stop at a turn until a successful input is achieved.
 2. Color-based: Go from green to yellow to red to flashing red. Valid when color reaches a particular hue.
@@ -76,19 +76,19 @@ Here is a list of experiments to use this framework to create better variants.
 4. Quantize the distance to make it harder.
 5. Display random distances greater than the death distance for invalid turns to make it harder (visual clutter).
 
-### Sound-based
+## Sound-based
 
 6. Change pitch.
 7. Change speed.
 8. Add sound clutter to make it harder.
 
-### Multi-player
+## Multi-player
 
 9. Local multi-player: Everyone stays in sync, but they die (or lose a life) if they fail a teleportation. Similar to red-light, green-light.
 10. Cooperative multi-player (locally): It takes N out of M valid teleportation events to be successful.
 11. Individual displays either split screen, networked, or using handheld devices and a shared master display using AirConsole ([https://assetstore.unity.com/packages/tools/game-toolkits/airconsole-42776](https://assetstore.unity.com/packages/tools/game-toolkits/airconsole-42776)).
 
-### Graphics
+## Graphics
 
 12. Spline-based paths
 13. Tiles
@@ -98,7 +98,7 @@ Here is a list of experiments to use this framework to create better variants.
 	c. Shape
 15. Endless possibilities for endless runners
 
-### Other Games
+## Other Games
 
 16. Flappy Bird
 17. Red-light, Green-light

@@ -1,10 +1,12 @@
-﻿using CrawfisSoftware.AssetManagement;
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace CrawfisSoftware.TempleRun
 {
+    /// <summary>
+    /// Updates the UXML document for the current distances. Could be broken into different classes.
+    /// </summary>
     internal class GUIController : MonoBehaviour
     {
         [SerializeField] private UIDocument _uiDocument;

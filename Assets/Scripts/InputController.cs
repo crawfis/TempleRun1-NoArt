@@ -8,6 +8,7 @@ namespace CrawfisSoftware.TempleRun
     {
         [SerializeField] private InputActionAsset _inputAsset;
 
+        const int PlayerNumber = 0;
         private LeftRightJumpSlide _inputActions;
         private InputAction _leftAction;
         private InputAction _rightAction;
@@ -26,14 +27,14 @@ namespace CrawfisSoftware.TempleRun
         private void LeftAction_performed(InputAction.CallbackContext obj)
         {
             _leftAction.Disable();
-            EventsPublisherTempleRun.Instance.PublishEvent(KnownEvents.LeftTurnRequested, this, null);
+            EventsPublisherTempleRun.Instance.PublishEvent(KnownEvents.LeftTurnRequested, this, PlayerNumber);
             StartCoroutine(EnableAfterDelay(_leftAction));
         }
 
         private void RightAction_performed(InputAction.CallbackContext obj)
         {
             _leftAction.Disable();
-            EventsPublisherTempleRun.Instance.PublishEvent(KnownEvents.RightTurnRequested, this, null);
+            EventsPublisherTempleRun.Instance.PublishEvent(KnownEvents.RightTurnRequested, this, PlayerNumber);
             StartCoroutine(EnableAfterDelay(_leftAction));
         }
 

@@ -2,6 +2,10 @@
 
 namespace CrawfisSoftware.TempleRun
 {
+    /// <summary>
+    /// Speed controller that updates a DistanceTracker.
+    /// Dependencies: DistanceTracker and GameConfig (from Blackboard)
+    /// </summary>
     internal class DistanceController : MonoBehaviour
     {
         [SerializeField] private DistanceTracker _distanceTracker;
@@ -26,6 +30,7 @@ namespace CrawfisSoftware.TempleRun
             _speed = Mathf.Clamp(_speed, _initialSpeed, _maxSpeed);
         }
 
+        // Typically called when a player loses a life.
         public void Reset()
         {
             _speed = _initialSpeed;

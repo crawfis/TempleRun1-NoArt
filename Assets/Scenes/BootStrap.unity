@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57ff8ae5ba5cc314e97305de17d5023c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameConfig: {fileID: 11400000, guid: 03a6587a4fa72ac459a8748a4d932bb2, type: 2}
+  _gameConfig: {fileID: 11400000, guid: af68983c79588564db0b8f6f2201e5e9, type: 2}
   _sceneName: TempleRunNoArt
 --- !u!1 &1234304534
 GameObject:

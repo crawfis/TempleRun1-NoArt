@@ -3,26 +3,46 @@ using UnityEngine;
 
 namespace CrawfisSoftware.TempleRun
 {
+    /// <summary>
+    /// Provides new track distance for each turn. It does one thing. It publishes a new track segment 
+    ///       when needed (when AdvanceToNextSegment is called).
+    ///    Dependencies: EventsPublisherTempleRun and (currently) BlackBoard.GameConfig, Blackboard.MasterRandom
+    ///        The Blackboard can be removed my having GameController create this instance and passing in data to the constructor.
+    ///    Subscribes to the Turn Succeeded events (LeftTurnSucceeded, RightTurnSucceeded)
+    ///    Publishes an event each time it provides a new track. Data is a tuple (Direction, distance)
+    /// </summary>
+    /// <remarks> Obstacle and gap distances should be in a separate class(es)
+    /// Random distances (_random) could be replaced with a list of possible distances, but a better / cleaner solution would
+    /// be to have another class subscribe to the event, massage the data and publish a new event. This may be needed
+    /// for example to map the distance to a number of tiles.</remarks>
     public class TrackManager : MonoBehaviour
     {
+        // Todo: Remove MonoBehaviour
         const int TrackLength = 5;
         private readonly Queue<float> _trackSegments = new(TrackLength);
         private float _startDistance = 10f;
         private float _minDistance = 3;
         private float _maxDistance = 9;
+        private System.Random _random;
 
         private void Awake()
         {
-            EventsPublisherTempleRun.Instance.SubscribeToEvent(KnownEvents.LeftTurnSucceeded, OnTurnSucceeded);
-            EventsPublisherTempleRun.Instance.SubscribeToEvent(KnownEvents.RightTurnSucceeded, OnTurnSucceeded);
-            _startDistance = Blackboard.Instance.GameConfig.StartRunway;
-            _minDistance = Blackboard.Instance.GameConfig.MinDistance;
-            _maxDistance = Blackboard.Instance.GameConfig.MaxDistance;
+            // Todo: Remove Awake and move to a constructor w/o the Blackboard.
+            var gameConfig = Blackboard.Instance.GameConfig;
+            Initialize(gameConfig.StartRunway, gameConfig.MinDistance,
+                gameConfig.MaxDistance, Blackboard.Instance.MasterRandom.RandomGenerator);
         }
 
-        private void OnTurnSucceeded(object sender, object data)
+        public void Start()
         {
-            AdvanceToNextSegment();
+            // Todo: Remove Start and make CreateInitialTrack public
+            CreateInitialTrack();
+        }
+
+        public void OnDestroy()
+        {
+            EventsPublisherTempleRun.Instance.UnsubscribeToEvent(KnownEvents.LeftTurnSucceeded, OnTurnSucceeded);
+            EventsPublisherTempleRun.Instance.UnsubscribeToEvent(KnownEvents.RightTurnSucceeded, OnTurnSucceeded);
         }
 
         public void AdvanceToNextSegment()
@@ -32,22 +52,17 @@ namespace CrawfisSoftware.TempleRun
             EventsPublisherTempleRun.Instance.PublishEvent(KnownEvents.ActiveTrackChanged, this, (GetNewDirection(), _trackSegments.Peek()));
         }
 
-        private Direction GetNewDirection()
+        private void Initialize(float startDistance, float minDistance, float maxDistance, System.Random random)
         {
-            var random = Blackboard.Instance.MasterRandom.RandomGenerator;
-            float randomValue = (float) random.NextDouble();
-            switch (randomValue)
-            {
-                case < 0.4f:
-                    return Direction.Left;
-                case < 0.8f:
-                    return Direction.Right;
-                default:
-                    return Direction.Both;
-            }
+            _startDistance = startDistance;
+            _minDistance = minDistance;
+            _maxDistance = maxDistance;
+            _random = random;
+            EventsPublisherTempleRun.Instance.SubscribeToEvent(KnownEvents.LeftTurnSucceeded, OnTurnSucceeded);
+            EventsPublisherTempleRun.Instance.SubscribeToEvent(KnownEvents.RightTurnSucceeded, OnTurnSucceeded);
         }
 
-        private void Start()
+        private void CreateInitialTrack()
         {
             _maxDistance = Mathf.Max(_minDistance, _maxDistance);
             _trackSegments.Enqueue(_startDistance);
@@ -58,10 +73,26 @@ namespace CrawfisSoftware.TempleRun
             EventsPublisherTempleRun.Instance.PublishEvent(KnownEvents.ActiveTrackChanged, this, (Direction.Left, _trackSegments.Peek()));
         }
 
+        private void OnTurnSucceeded(object sender, object data)
+        {
+            AdvanceToNextSegment();
+        }
+
         private void AddTrackSegment()
         {
-            float segmentLength = (float) Blackboard.Instance.MasterRandom.RandomGenerator.NextDouble() * (_maxDistance - _minDistance) + _minDistance;
+            float segmentLength = (float)_random.NextDouble() * (_maxDistance - _minDistance) + _minDistance;
             _trackSegments.Enqueue(segmentLength);
+        }
+
+        private Direction GetNewDirection()
+        {
+            float randomValue = (float)_random.NextDouble();
+            return randomValue switch
+            {
+                < 0.4f => Direction.Left,
+                < 0.8f => Direction.Right,
+                _ => Direction.Both,
+            };
         }
     }
 }
