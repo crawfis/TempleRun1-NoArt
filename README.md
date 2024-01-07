@@ -44,6 +44,37 @@ This sample simply displays the death distance of the model as a text. It does t
 
 The controller maps input requests to actions. If a turn is requested, it will determine whether the request is valid: within the valid turn distance and a valid teleportation. If so, it will trigger a turn successfully event to update the model and the view. If the player distance reaches the end of the current path or the death distance, then an event is also triggered that will update the model.
 
+## Events
+- GameStarted
+	- Published by GameController
+	- Subscribed by DeathWatcher, DistanceController
+- GameOver
+	- Published by GameController
+	- Subscribed by DeathWatcher, DistanceController, GameOverController
+- Pause
+	- Published by PlayerFailedController
+	- Subscribed by GameController 
+- Resume
+	- Published by PlayerGailedController
+	- Subscribed by GameController 
+- ActiveTrackChanged
+	- Published by TrackManager
+	- Subscribed by DeathWatcher, GUIController, PlayerController
+- LeftTurnRequested
+	- Published by InputController
+	- Subscribed by PlayerController
+- RightTurnRequested
+	- Published by InputController
+	- Subscribed by PlayerController
+- LeftTurnSucceeded
+	- Published by PlayerController
+	- Subscribed by TrackManager
+- RightTurnSucceeded
+	- Published by PlayerController
+	- Subscribed by TrackManager
+- CountdownStarted - Not implemented
+- CountdownTick - Not implemented
+
 ## Changing the Input Controls
 
 The original had a fun input of swiping left or swiping right for turns and then used the accelerometer for moving the character to one of the three lanes the character would be in. It used a swipe down to slide under obstacles or at any time just for fun. It used a swipe up to jump over obstacles and gaps. The swipe input is a rather long input, so performing consecutive turns requires a fair bit of time. Mapping this to a keyboard or gamepad key leads to a somewhat different experience. I can simply smash the keyboard long before the turn is available. To counteract this, I added an input cool-down.

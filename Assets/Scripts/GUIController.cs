@@ -44,5 +44,11 @@ namespace CrawfisSoftware.TempleRun
             _nextTrackDirection = tuple.Item1;
             _trackDistance += tuple.Item2;
         }
+
+        private void OnDestroy()
+        {
+            EventsPublisherTempleRun.Instance.UnsubscribeToEvent(KnownEvents.ActiveTrackChanged, OnTrackChanged);
+
+        }
     }
 }

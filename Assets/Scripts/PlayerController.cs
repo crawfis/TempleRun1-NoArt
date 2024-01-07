@@ -61,5 +61,12 @@ namespace CrawfisSoftware.TempleRun
             _trackDistance += segmentDistance;
             _turnAvailableDistance = _trackDistance - _safeTurnDistance;
         }
+
+        private void OnDestroy()
+        {
+            EventsPublisherTempleRun.Instance.UnsubscribeToEvent(KnownEvents.LeftTurnRequested, OnLeftTurnRequested);
+            EventsPublisherTempleRun.Instance.UnsubscribeToEvent(KnownEvents.RightTurnRequested, OnRightTurnRequested);
+            EventsPublisherTempleRun.Instance.UnsubscribeToEvent(KnownEvents.ActiveTrackChanged, OnTrackChanged);
+        }
     }
 }
