@@ -45,6 +45,12 @@ This sample simply displays the death distance of the model as a text. It does t
 The controller maps input requests to actions. If a turn is requested, it will determine whether the request is valid: within the valid turn distance and a valid teleportation. If so, it will trigger a turn successfully event to update the model and the view. If the player distance reaches the end of the current path or the death distance, then an event is also triggered that will update the model.
 
 ## Events
+Clean and readable code is great, but is usually makes understanding the architecture a little more difficult. Here we will explain the main events that control the game and the relationships between them. The typical series of events is that
+a GameStarted event will prompt the DistanceController to start updating the distance. The DeathWatcher will also start, checking if the end of the track has been reached. If so it, will fire an PlayerFailed event. The TrackManager starts 
+immediately and publishes an ActiveTrack event that let's the DeathWatcher and PlayerController know the current active track distance. The GUIController also listens to this event to update its display. The InputController fires 
+LeftTurnRequest and RightTurnRequest events that are handled by the PlayerController. The PlayerFailedController will determine whether the input request was valid. If so it will Publish LeftTurnSucceeded or RightTurnSucceeded event. 
+Only the TrackManager listens for these events, but a score systme, Vfx system or Sfx system could listen to these as well. The TrackManager will provide the next track distance everytime one of these events are triggered.
+
 - GameStarted
 	- Published by GameController
 	- Subscribed by DeathWatcher, DistanceController
@@ -55,7 +61,7 @@ The controller maps input requests to actions. If a turn is requested, it will d
 	- Published by PlayerFailedController
 	- Subscribed by GameController 
 - Resume
-	- Published by PlayerGailedController
+	- Published by PlayerFailedController
 	- Subscribed by GameController 
 - ActiveTrackChanged
 	- Published by TrackManager
@@ -77,9 +83,12 @@ The controller maps input requests to actions. If a turn is requested, it will d
 
 ## Changing the Input Controls
 
-The original had a fun input of swiping left or swiping right for turns and then used the accelerometer for moving the character to one of the three lanes the character would be in. It used a swipe down to slide under obstacles or at any time just for fun. It used a swipe up to jump over obstacles and gaps. The swipe input is a rather long input, so performing consecutive turns requires a fair bit of time. Mapping this to a keyboard or gamepad key leads to a somewhat different experience. I can simply smash the keyboard long before the turn is available. To counteract this, I added an input cool-down.
+The original Temple Run using swiping left or swiping right for turns, which I find to be a more enjoyable experience that mashing a keyboard key. It uses the accelerometer for moving the character to one of the three lanes. 
+It uses a swipe down to slide under obstacles or at any time just for fun. It uses a swipe up to jump over obstacles and gaps. The swipe input is a rather long input, so performing consecutive turns requires a fair bit of time. 
+Mapping this to a keyboard or gamepad key leads to a somewhat different experience. I can simply smash the keyboard long before the turn is available. To counteract this, I added an input cool-down. I added this to the InputController, 
+but could have easily added it to the PlayerController. Cleaner code would be to create a new class to handle this creating new events between this class and the PlayerController. 
 
-In contrast, changing lanes using the accelerometer is very fast compared to even a keyboard press, at least for the minimal orientation changes required in the original game.
+In contrast to swiping, changing lanes using the accelerometer is very fast compared to even a keyboard press, at least for the minimal orientation changes required in the original game.
 
 ### Alternative inputs
 
@@ -93,11 +102,14 @@ In contrast, changing lanes using the accelerometer is very fast compared to eve
 - Facial expression
 - DDR or Dance Mat
 - Pressure plate
-- Bosa ball with accelerator
+- Bosa ball with accelerator (we made a prototype of this at RxGames in 2020 with the help of an OSU capstone course group from Electrical Engineering.
+
 
 # Projects
 
-Here is a list of experiments to use this framework to create better variants.
+Here is a list of experiments to create better variants using this framework. I believe you can accomplish these on top of the existing code without any changes needed to this code base.
+The goal here is to help my students and you focus on event-based programming with Unity and avoid many of the problems associated with embedding scripts into specific art and physics. I 
+have another project (Recovery Rapids from RxGames) where I use a multi-lane path controller to play the entire game with over 10 game mechanics. We have demos with no Art, just the spline of the path.
 
 ## UI Toolkit-based
 
@@ -106,6 +118,7 @@ Here is a list of experiments to use this framework to create better variants.
 3. Visual (or SFX) pops up only when a turn is valid similar to Whack a Mole.
 4. Quantize the distance to make it harder.
 5. Display random distances greater than the death distance for invalid turns to make it harder (visual clutter).
+6. More inputs with more choices for more teleports (turns) like up, down, northwest, ...
 
 ## Sound-based
 
@@ -127,9 +140,12 @@ Here is a list of experiments to use this framework to create better variants.
 	a. Math
 	b. Color
 	c. Shape
-15. Endless possibilities for endless runners
+15. Other visual enhancements, like fancy character animations on the various events.
+16. Endless possibilities for endless runners
 
 ## Other Games
+
+There really is nothing special about Temple Run in this framework. An initial implementation had only one key and always turned left. This is a single tap game architecture like Flappy Bird or many single tap games.
 
 16. Flappy Bird
 17. Red-light, Green-light
