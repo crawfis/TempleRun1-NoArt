@@ -30,7 +30,7 @@ namespace CrawfisSoftware.TempleRun
             // Todo: Remove Awake and move to a constructor w/o the Blackboard.
             var gameConfig = Blackboard.Instance.GameConfig;
             Initialize(gameConfig.StartRunway, gameConfig.MinDistance,
-                gameConfig.MaxDistance, Blackboard.Instance.MasterRandom.RandomGenerator);
+                gameConfig.MaxDistance, Blackboard.Instance.MasterRandom);
         }
 
         public void Start()

@@ -7,9 +7,10 @@ namespace CrawfisSoftware.TempleRun
     /// Overall game control handling pausing, resuming and player failing.
     ///    Dependency: PlayerLifeController, EventsPublisherTempleRun
     ///    Subscribes: PlayerDied - Publishes a GameOver event
-    ///    Subscribes: GameOver - abruptly ends the game
     ///    Subscribes: Pause - pauses be setting time scale to zero
     ///    Subscribes: Resume - resets the time scale to one
+    ///    Publishes: GameStarted
+    ///    Publishes: GameOver
     /// </summary>
     internal class GameController : MonoBehaviour
     {
@@ -17,9 +18,8 @@ namespace CrawfisSoftware.TempleRun
 
         private void Awake()
         {
-            Time.timeScale = 0.0f;
+            //Time.timeScale = 0.0f;
             EventsPublisherTempleRun.Instance.SubscribeToEvent(KnownEvents.PlayerDied, OnPlayerDied);
-            EventsPublisherTempleRun.Instance.SubscribeToEvent(KnownEvents.GameOver, OnGameOver);
             EventsPublisherTempleRun.Instance.SubscribeToEvent(KnownEvents.Pause, OnPause);
             EventsPublisherTempleRun.Instance.SubscribeToEvent(KnownEvents.Resume, OnResume);
         }
@@ -33,10 +33,10 @@ namespace CrawfisSoftware.TempleRun
 
         private IEnumerator StartGame()
         {
-            Time.timeScale = 0.0f;
-            yield return new WaitForSecondsRealtime(GameConstants.ResumeDelay);
+            //Time.timeScale = 0.0f;
+            yield return new WaitForSecondsRealtime(GameConstants.StartDelay);
             EventsPublisherTempleRun.Instance.PublishEvent(KnownEvents.GameStarted, this, null);
-            Time.timeScale = 1.0f;
+            //Time.timeScale = 1.0f;
         }
 
         private void OnPlayerDied(object sender, object data)
@@ -54,26 +54,6 @@ namespace CrawfisSoftware.TempleRun
             Time.timeScale = 1.0f;
         }
 
-        private void OnGameOver(object sender, object data)
-        {
-            StartCoroutine(Quit());
-        }
-
-        private IEnumerator Quit()
-        {
-            UnsubscribeToEvents();
-            // Since we are the first subscriber, let's wait for anyone else wanting to handle this event.
-            // High score can log, etc. In general though, this would only be on a quit button.
-            yield return new WaitForEndOfFrame();
-
-            // For a more complex game with many scenes, we may want to access the EventsPublisher and flush all events from it (Pop).
-
-            // This shows the proper way to quit a game both in Editor and with a build
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#endif
-            Application.Quit();
-        }
 
         private void OnDestroy()
         {
@@ -83,7 +63,6 @@ namespace CrawfisSoftware.TempleRun
         private void UnsubscribeToEvents()
         {
             EventsPublisherTempleRun.Instance.UnsubscribeToEvent(KnownEvents.PlayerDied, OnPlayerDied);
-            EventsPublisherTempleRun.Instance.UnsubscribeToEvent(KnownEvents.GameOver, OnGameOver);
             EventsPublisherTempleRun.Instance.UnsubscribeToEvent(KnownEvents.Pause, OnPause);
             EventsPublisherTempleRun.Instance.UnsubscribeToEvent(KnownEvents.Resume, OnResume);
         }
