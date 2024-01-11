@@ -93,6 +93,7 @@ Mapping this to a keyboard or gamepad key leads to a somewhat different experien
 but could have easily added it to the PlayerController. Cleaner code would be to create a new class to handle this creating new events between this class and the PlayerController. 
 
 In contrast to swiping, changing lanes using the accelerometer is very fast compared to even a keyboard press, at least for the minimal orientation changes required in the original game.
+For an even faster turn input (say in Insane mode) the input configuration could use a key up event rather than a pressed event.
 
 ### Alternative inputs
 
