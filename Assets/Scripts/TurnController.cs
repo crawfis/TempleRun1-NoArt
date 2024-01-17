@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace CrawfisSoftware.TempleRun
 {
@@ -10,16 +11,28 @@ namespace CrawfisSoftware.TempleRun
     ///    Subscribes: ActiveTrackChanged - adjusts the next valid turn distance.
     ///    Publishes: LeftTurnSucceeded, RightTurnSucceeded
     /// </summary>
-    internal class PlayerController : MonoBehaviour
+    internal class TurnController : MonoBehaviour
     {
-        [SerializeField] private DistanceTracker _distanceTracker;
+        public float TurnAvailableDistance { get { return _turnAvailableDistance; } }
+        public float TurnFailedDistance { get { return _trackDistance; } }
+        public Direction TurnDirection {  get {  return _nextTrackDirection; } }
 
         private float _safeTurnDistance = 1f;
         private float _trackDistance = 0;
-        float _turnAvailableDistance;
+        private float _turnAvailableDistance;
         // Possible Bug: If Direction is changed to a Flag, then _nextTrackDirection needs to be masked. Could be done now just in case.
         private Direction _nextTrackDirection;
+        private readonly Dictionary<Direction, KnownEvents> _turnMapping = new()
+        {
+            [Direction.Left] = KnownEvents.LeftTurnSucceeded,
+            [Direction.Right] = KnownEvents.RightTurnSucceeded,
+            [Direction.Both] = KnownEvents.RightTurnSucceeded
+        };
 
+        public void ForceTurn()
+        {
+            OnTurnRequested(this, null, _turnMapping[_nextTrackDirection]);
+        }
         private void Awake()
         {
             EventsPublisherTempleRun.Instance.SubscribeToEvent(KnownEvents.LeftTurnRequested, OnLeftTurnRequested);
@@ -30,10 +43,10 @@ namespace CrawfisSoftware.TempleRun
 
         private void OnTurnRequested(object sender, object data, KnownEvents turnSucceedEvent)
         {
-            if (_distanceTracker.DistanceTravelled > _turnAvailableDistance)
+            float distance = Blackboard.Instance.DistanceTracker.DistanceTravelled;
+            if (distance > _turnAvailableDistance)
             {
-                float distance = _distanceTracker.DistanceTravelled;
-                _distanceTracker.UpdateDistance(_trackDistance - distance);
+                Blackboard.Instance.DistanceTracker.UpdateDistance(_trackDistance - distance);
                 EventsPublisherTempleRun.Instance.PublishEvent(turnSucceedEvent, this, distance);
             }
         }

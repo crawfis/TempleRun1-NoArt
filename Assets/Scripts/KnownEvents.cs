@@ -4,7 +4,7 @@
     {
         LeftTurnRequested, LeftTurnSucceeded,
         RightTurnRequested, RightTurnSucceeded,
-        ActiveTrackChanged,
+        ActiveTrackChanged, TrackSegmentCreated,
         PlayerFailed, PlayerDied,
         GameStarted, GameOver, Pause, Resume,
         CountdownStarted, CountdownTick

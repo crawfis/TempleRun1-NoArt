@@ -28,5 +28,10 @@
                 EventsPublisherTempleRun.Instance.PublishEvent(KnownEvents.PlayerDied, this, _playerID);
             }
         }
+
+        private void OnDestroy()
+        {
+            EventsPublisherTempleRun.Instance.UnsubscribeToEvent(KnownEvents.PlayerFailed, OnPlayerFailed);
+        }
     }
 }
