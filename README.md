@@ -4,7 +4,9 @@ I recently watched a tutorial video by one of my favorite youtuber’s for Unity
 
 ## How to Run
 
-This was created with Unity 2023.2.3f1 (Localization will need 2023.3 with the new Binding for UI Toolkit). To Run, Open the Bootstrap scene. I did not include the script that automatically loads the first scene on Play.
+This was created with Unity 2023.2.3f1 (Localization will need 2023.3 with the new Binding for UI Toolkit). To Run, Open the Bootstrap scene. I did not include the script that automatically loads the first scene on Play. This will
+only display some text. Use the 'A' key to turn left and the 'D' key to turn right. Different config files can control the difficulty. If you want a simple 3D environment, the [package](https://github.com/crawfis/TempleRun1-NoArt/blob/TempleRun3D/EndlessRunnerVisuals.unitypackage) can be imported to have a nice 3D Temple Run. It does not support T-junctions, so the TrackManager was slightly modified. Otherwise
+it works with the existing events, separating the art from the basic gameplay.
 
 ## Rethinking Temple Run
 
@@ -51,13 +53,13 @@ The controller maps input requests to actions. If a turn is requested, it will d
 ## Events
 Clean and readable code is great, but is usually makes understanding the architecture a little more difficult. Here we will explain the main events that control the game and the relationships between them. The typical series of events is that
 a GameStarted event will prompt the DistanceController to start updating the distance. The DeathWatcher will also start, checking if the end of the track has been reached. If so it, will fire an PlayerFailed event. The TrackManager starts 
-immediately and publishes an ActiveTrack event that let's the DeathWatcher and PlayerController know the current active track distance. The GUIController also listens to this event to update its display. The InputController fires 
-LeftTurnRequest and RightTurnRequest events that are handled by the PlayerController. The PlayerFailedController will determine whether the input request was valid. If so it will Publish LeftTurnSucceeded or RightTurnSucceeded event. 
+immediately and publishes an ActiveTrack event that let's the DeathWatcher and TurnController know the current active track distance. The GUIController also listens to this event to update its display. The InputController fires 
+LeftTurnRequest and RightTurnRequest events that are handled by the TurnController. The PlayerFailedController will determine whether the input request was valid. If so it will Publish LeftTurnSucceeded or RightTurnSucceeded event. 
 Only the TrackManager listens for these events, but a score systme, Vfx system or Sfx system could listen to these as well. The TrackManager will provide the next track distance everytime one of these events are triggered.
 
 - GameStarted
 	- Published by GameController
-	- Subscribed by DeathWatcher, DistanceController
+	- Subscribed by DeathWatcher, DistanceController, TrackManager
 - GameOver
 	- Published by GameController
 	- Subscribed by DeathWatcher, DistanceController, GameOverController
@@ -69,19 +71,25 @@ Only the TrackManager listens for these events, but a score systme, Vfx system o
 	- Subscribed by GameController 
 - ActiveTrackChanged
 	- Published by TrackManager
-	- Subscribed by DeathWatcher, GUIController, PlayerController
+	- Subscribed by DeathWatcher, GUIController, TurnController
 - LeftTurnRequested
 	- Published by InputController
-	- Subscribed by PlayerController
+	- Subscribed by TurnController
 - RightTurnRequested
 	- Published by InputController
-	- Subscribed by PlayerController
+	- Subscribed by TurnController
 - LeftTurnSucceeded
-	- Published by PlayerController
+	- Published by TurnController
 	- Subscribed by TrackManager
 - RightTurnSucceeded
-	- Published by PlayerController
+	- Published by TurnController
 	- Subscribed by TrackManager
+- PlayerFailed
+	- Published by 
+	- Subscribed by DistanceController, PlayerLifeController
+- PlayerDied
+	- Published by PlayerLifeController
+	- Subscribed by GameController
 - CountdownStarted - Not implemented
 - CountdownTick - Not implemented
 
@@ -90,7 +98,7 @@ Only the TrackManager listens for these events, but a score systme, Vfx system o
 The original Temple Run using swiping left or swiping right for turns, which I find to be a more enjoyable experience that mashing a keyboard key. It uses the accelerometer for moving the character to one of the three lanes. 
 It uses a swipe down to slide under obstacles or at any time just for fun. It uses a swipe up to jump over obstacles and gaps. The swipe input is a rather long input, so performing consecutive turns requires a fair bit of time. 
 Mapping this to a keyboard or gamepad key leads to a somewhat different experience. I can simply smash the keyboard long before the turn is available. To counteract this, I added an input cool-down. I added this to the InputController, 
-but could have easily added it to the PlayerController. Cleaner code would be to create a new class to handle this creating new events between this class and the PlayerController. 
+but could have easily added it to the TurnController. Cleaner code would be to create a new class to handle this creating new events between this class and the TurnController. 
 
 In contrast to swiping, changing lanes using the accelerometer is very fast compared to even a keyboard press, at least for the minimal orientation changes required in the original game.
 For an even faster turn input (say in Insane mode) the input configuration could use a key up event rather than a pressed event.
