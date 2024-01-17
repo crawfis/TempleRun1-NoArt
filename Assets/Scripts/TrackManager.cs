@@ -95,7 +95,7 @@ namespace CrawfisSoftware.TempleRun
             {
                 < 0.4f => Direction.Left,
                 < 0.8f => Direction.Right,
-                _ => Direction.Both,
+                _ => Direction.Left,
             };
         }
     }

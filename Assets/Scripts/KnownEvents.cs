@@ -7,6 +7,7 @@
         ActiveTrackChanged, TrackSegmentCreated,
         PlayerFailed, PlayerDied,
         GameStarted, GameOver, Pause, Resume,
+        SplinePointAdded, CurrentSplineChanged,
         CountdownStarted, CountdownTick
     };
 }
