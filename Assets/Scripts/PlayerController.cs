@@ -13,7 +13,7 @@ namespace CrawfisSoftware.TempleRun
     internal class PlayerController : MonoBehaviour
     {
         [SerializeField] private DistanceTracker _distanceTracker;
-        
+
         private float _safeTurnDistance = 1f;
         private float _trackDistance = 0;
         float _turnAvailableDistance;
@@ -48,7 +48,7 @@ namespace CrawfisSoftware.TempleRun
 
         private void OnRightTurnRequested(object sender, object data)
         {
-            if (_nextTrackDirection != Direction.Left) 
+            if (_nextTrackDirection != Direction.Left)
             {
                 OnTurnRequested(sender, data, KnownEvents.RightTurnSucceeded);
             }
@@ -56,7 +56,7 @@ namespace CrawfisSoftware.TempleRun
 
         private void OnTrackChanged(object sender, object data)
         {
-            var (direction, segmentDistance) = ((Direction direction, float segmentDistance)) data;
+            var (direction, segmentDistance) = ((Direction direction, float segmentDistance))data;
             _nextTrackDirection = direction;
             _trackDistance += segmentDistance;
             _turnAvailableDistance = _trackDistance - _safeTurnDistance;
