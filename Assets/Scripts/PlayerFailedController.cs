@@ -5,13 +5,12 @@ namespace CrawfisSoftware.TempleRun
 {
     /// <summary>
     /// Simple behavior for failure. In this case, pauses the game, advances to the next track and then resumes.
-    ///    Dependency: TrackManager, EventsPublisherTempleRun
+    ///    Dependency: TurnController, EventsPublisherTempleRun
     ///    Subscribes: PlayerFailed - pauses game for a fixed time and then resumes.
     ///    Publishes: Pause and Resume
     /// </summary>
     internal class PlayerFailedController : MonoBehaviour
     {
-        //[SerializeField] private TrackManagerAbstract _trackManager;
         [SerializeField] private TurnController _turnController;
         private Coroutine _pauseCoroutine;
         private Coroutine _advanceTrackCoroutine;

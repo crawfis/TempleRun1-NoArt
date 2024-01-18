@@ -6,8 +6,8 @@ namespace CrawfisSoftware.TempleRun
     /// <summary>
     /// Maps input events to game events. Will check if a turn request is the proper direction and within 
     ///    the turn distance. If so, it will fire a turn successful event.
-    ///    Dependencies: DistanceTracker, EventsPublisherTempleRun
-    ///    Subscribes: LeftTurnRequested and RightTurnRequested. If it is a valid turn published corresponding turn successful event.
+    ///    Dependencies: DistanceTracker (from the Blackboard), EventsPublisherTempleRun
+    ///    Subscribes: LeftTurnRequested and RightTurnRequested. A valid turn will publish a corresponding turn successful event.
     ///    Subscribes: ActiveTrackChanged - adjusts the next valid turn distance.
     ///    Publishes: LeftTurnSucceeded, RightTurnSucceeded
     /// </summary>

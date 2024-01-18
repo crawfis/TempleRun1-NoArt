@@ -3,6 +3,11 @@ using UnityEngine;
 
 namespace CrawfisSoftware.TempleRun
 {
+    /// <summary>
+    /// Behavior for when the game is over. Just delays a few seconds before quiting.
+    ///    Dependency: EventsPublisherTempleRun
+    ///    Subscribes: GameOver
+    /// </summary>
     internal class GameOverController : MonoBehaviour
     {
         private void Start()

@@ -8,6 +8,7 @@ namespace CrawfisSoftware.TempleRun
     ///    Dependencies: DistanceTracker and GameConfig (from Blackboard)
     ///    Subscribes: GameStarted
     ///    Subscribes: GameOver
+    ///    Subscribes: PlayerFailed
     /// </summary>
     internal class DistanceController : MonoBehaviour
     {

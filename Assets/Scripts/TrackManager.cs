@@ -4,12 +4,14 @@ using UnityEngine;
 namespace CrawfisSoftware.TempleRun
 {
     /// <summary>
-    /// Provides new track distance for each turn. It does one thing. It publishes a new track segment 
-    ///       when needed (when AdvanceToNextSegment is called).
+    /// Provides new track distances for each turn and determines the current track the player is on. 
     ///    Dependencies: EventsPublisherTempleRun and (currently) BlackBoard.GameConfig, Blackboard.MasterRandom
     ///        The Blackboard can be removed my having GameController create this instance and passing in data to the constructor.
-    ///    Subscribes to the Turn Succeeded events (LeftTurnSucceeded, RightTurnSucceeded)
-    ///    Publishes an event each time it provides a new track. Data is a tuple (Direction, distance)
+    ///    Subscribes: LeftTurnSucceeded, RightTurnSucceeded
+    ///    Publishes: ActiveTrackChanged. Data is a tuple (Direction, distance)
+    ///    Publishes: TrackSegmentCreated. Data is a tuple (Direction, distance)
+    ///    Subscribes: PlayerFailed - pauses game for a fixed time and then resumes.
+    ///    Publishes: Pause and Resume
     /// </summary>
     /// <remarks> Obstacle and gap distances should be in a separate class(es).
     /// Random distances (_random) could be replaced with a list of possible distances, but a better / cleaner solution would
