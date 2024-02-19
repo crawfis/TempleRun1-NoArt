@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CrawfisSoftware.AssetManagement
 {
-    internal class EventsPublisherEnums<T> : MonoBehaviour where T : Enum
+    public class EventsPublisherEnums<T> : MonoBehaviour where T : Enum
     {
         public static EventsPublisherEnums<T> Instance { get; private set; }
         // Todo: May want to add the nameof(T) to the string to avoid conflicts with several enums.

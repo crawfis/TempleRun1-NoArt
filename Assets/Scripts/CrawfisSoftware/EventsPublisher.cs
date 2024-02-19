@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace CrawfisSoftware.AssetManagement
 {
     public class EventsPublisher : IEventsPublisher
     {
         public static IEventsPublisher Instance { get; private set; }
+
         static EventsPublisher()
         {
             Instance = new EventsPublisher();
@@ -39,7 +41,6 @@ namespace CrawfisSoftware.AssetManagement
             foreach (IEventsPublisher publisher in _eventsPublishers) { publisher.PublishEvent(eventName, sender, data); }
         }
 
-        // Todo: This will return duplicates if the same event is registered at several layers of the stack. May want to filter.
         public void RegisterEvent(string eventName)
         {
             _eventsPublishers.Peek().RegisterEvent(eventName);
@@ -73,5 +74,11 @@ namespace CrawfisSoftware.AssetManagement
             }
         }
 
+        [RuntimeInitializeOnLoadMethod]
+        public static void ResetOnPlayMode()
+        {
+            Instance?.Clear();
+            //Instance = null;
+        }
     }
 }
